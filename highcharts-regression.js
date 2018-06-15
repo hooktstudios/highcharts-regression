@@ -55,7 +55,7 @@
                 var extrapolate = s.regressionSettings.extrapolate || 0;
                 regression = _polynomial(mergedData, order, extrapolate);
             } else if (regressionType == "power") {
-                regression = _power(mergedData);
+                regression = _power(mergedData, s.regressionSettings.decimalPlaces);
             } else if (regressionType == "logarithmic") {
                 regression = _logarithmic(mergedData);
             } else if (regressionType == "loess") {
@@ -264,7 +264,7 @@
     /**
      * Code extracted from https://github.com/Tom-Alexander/regression-js/
      */
-    function _power(data) {
+    function _power(data, decimalPlaces) {
         var sum = [0, 0, 0, 0], n = 0, results = [];
 
         for (len = data.length; n < len; n++) {
@@ -298,7 +298,7 @@
             return 0;
         });
 
-        var string = 'y = ' + Math.round(A * 100) / 100 + 'x^' + Math.round(B * 100) / 100;
+        var string = 'y = ' + A.toExponential(decimalPlaces) + 'x^' + _round(B, decimalPlaces);
 
         return {equation: [A, B], points: results, string: string};
     }
